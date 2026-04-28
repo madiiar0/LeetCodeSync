@@ -1,25 +1,17 @@
 typedef long long ll;
 class Solution {
 public:
+    int N=1e5+1;
     int firstMissingPositive(vector<int>& nums) {
-        unordered_set<ll> st;
-        st.insert(0);
-        for(auto to: nums){
-            if(to <= 0) continue;
-            st.insert(to);
-        }
-
-        ll mn=1e9;
+        vector<bool> used(N);
         for(int i=0; i<nums.size(); i++){
-            if(nums[i] <= 0ll) continue;
-            if(st.find(nums[i]-1ll) == st.end()){
-                mn=min(mn, nums[i]-1ll);
-            }
-            if(st.find(nums[i]+1ll) == st.end()){
-                mn=min(mn, nums[i]+1ll);
-            }
+            if(nums[i] <= 0 || nums[i] > 1e5) continue; 
+            used[nums[i]]=true;
         }
-        if(mn == 1e9 || st.find(1) == st.end()) return 1;
-        return mn;
+        for(int i=1; i<=nums.size()+1; i++){
+            if(used[i]) continue;
+            return i;
+        }
+        return 0;
     }
 };
