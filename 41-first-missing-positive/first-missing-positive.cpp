@@ -1,22 +1,25 @@
+typedef long long ll;
 class Solution {
 public:
     int firstMissingPositive(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        if(nums.size() == 1){
-            if(nums[0] != 1) return 1;
-            else return 2;
+        unordered_set<ll> st;
+        st.insert(0);
+        for(auto to: nums){
+            if(to <= 0) continue;
+            st.insert(to);
         }
-        for(int i=1; i<nums.size(); i++){
-            if(nums[i-1] <= 0 && nums[i] <= 0) continue;
-            else if(nums[i-1] <= 0){
-                if(nums[i] != 1) return 1;
+
+        ll mn=1e9;
+        for(int i=0; i<nums.size(); i++){
+            if(nums[i] <= 0ll) continue;
+            if(st.find(nums[i]-1ll) == st.end()){
+                mn=min(mn, nums[i]-1ll);
             }
-            else if(i == 1 && nums[i-1] != 1) return 1;
-            else if(abs(nums[i]-nums[i-1]) > 1){
-                return nums[i-1]+1;
+            if(st.find(nums[i]+1ll) == st.end()){
+                mn=min(mn, nums[i]+1ll);
             }
         }
-        if(nums[nums.size()-1] <= 0) return 1;
-        else return nums[nums.size()-1]+1;
+        if(mn == 1e9 || st.find(1) == st.end()) return 1;
+        return mn;
     }
 };
